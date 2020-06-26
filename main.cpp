@@ -27,8 +27,13 @@ void menuPrincipal();
 void crearSoldado();
 void eliminarSoldado();
 void listarSoldados();
-void guardarSoldados();
+
 void simulacion();
+
+void guardarSoldadosChina();
+void cargarSoldadosChina();
+void guardarSoldadosUSA();
+
 int main() {
 	setlocale(LC_ALL,"spanish");
 	while(true){
@@ -43,16 +48,12 @@ void menuPrincipal(){
 	<< "2. Eliminar Soldado" << endl
 	<< "3. Listar Soldados" << endl
 	<< "4. Guardar Soldados" << endl
-	<< "5. Cargar Soldados" << endl
+	<< "5. Cargar Soldados [NO FUNCIONA :( ]" << endl
 	<< "6. Simulación" << endl
 	<< "7. Salir" << endl
 	<< "Ingrese opcion: ";
 	cin >> opcion;
-	
-	/*if(opcion != 7){
-		cout << endl;
-	}*/
-	
+
 	system("cls");
 	
 	switch(opcion){
@@ -69,7 +70,13 @@ void menuPrincipal(){
 			break;
 		}
 		case 4:{
-			//guardarSoldados();
+			guardarSoldadosChina();
+			guardarSoldadosUSA();
+			cout << "Soldados guardados en archivos binarios!" << endl;
+			break;
+		}
+		case 5:{
+			cargarSoldadosChina();
 			break;
 		}
 		case 6:{
@@ -255,7 +262,7 @@ void listarSoldados(){
 	} else {
 		cout << "Ejercito CHINA" << endl;
 		for(int i=0;i<ejercitoChina.size();i++){
-			cout << (i+1) << ". Nombre: " << ejercitoChina[i]->getNombre() << endl;
+			cout << (i+1) << ". Nombre: " << ejercitoChina[i]->getNombre() << ", PTS Vida: " << ejercitoChina[i]->getPtsVida() << endl;
 		}
 		cout << endl;
 	}
@@ -264,7 +271,7 @@ void listarSoldados(){
 	} else {
 		cout << "Ejercito USA" << endl;
 		for(int i=0;i<ejercitoUSA.size();i++){
-			cout << (i+1) << ". Nombre: " << ejercitoUSA[i]->getNombre() << endl;
+			cout << (i+1) << ". Nombre: " << ejercitoUSA[i]->getNombre() << ", PTS Vida: " << ejercitoUSA[i]->getPtsVida() << endl;
 		}
 	}
 }
@@ -314,9 +321,66 @@ void simulacion(){
 				usaAsalto = false;
 			
 			// los soldados seleccionados se pelean entre si
-			ejercitoUSA[usa]->setPtsVida(chinaAsalto,ejercitoChina[china]->valorAtaque(usaAsalto));
-			ejercitoChina[china]->setPtsVida(usaAsalto,ejercitoUSA[usa]->valorAtaque(chinaAsalto));		
+			int turno = rand() % 10;
+			if(turno%2 == 0){
+				ejercitoUSA[usa]->setPtsVida(chinaAsalto,ejercitoChina[china]->valorAtaque(usaAsalto));		
+				cout << ejercitoChina[china]->getNombre();
+				if(chinaAsalto == true)
+					cout << " (ASALTO) ataca a: ";
+				else
+					cout << " (SOPORTE) ataca a: ";
+				cout<< ejercitoUSA[usa]->getNombre();
+				if(usaAsalto == true)
+					cout << " (ASALTO)";
+				else
+					cout << " (SOPORTE)";
+					
+				cout << endl;	
+									
+				ejercitoChina[china]->setPtsVida(usaAsalto,ejercitoUSA[usa]->valorAtaque(chinaAsalto));
+				cout << ejercitoUSA[usa]->getNombre();
+				if(usaAsalto == true)
+					cout << " (ASALTO) ataca a: ";
+				else
+					cout << " (SOPORTE) ataca a: ";	
+				cout << ejercitoChina[china]->getNombre();
+				if(chinaAsalto == true)
+					cout << " (ASALTO)";
+				else
+					cout << " (SOPORTE)";
 				
+				cout << endl << endl;	
+					
+			} else{
+				ejercitoChina[china]->setPtsVida(usaAsalto,ejercitoUSA[usa]->valorAtaque(chinaAsalto));
+				cout << ejercitoUSA[usa]->getNombre();
+				if(usaAsalto == true)
+					cout << " (ASALTO) ataca a: ";
+				else
+					cout << " (SOPORTE) ataca a: ";	
+				cout << ejercitoChina[china]->getNombre();
+				if(chinaAsalto == true)
+					cout << " (ASALTO)";
+				else
+					cout << " (SOPORTE)";
+					
+				cout << endl;
+					
+				ejercitoUSA[usa]->setPtsVida(chinaAsalto,ejercitoChina[china]->valorAtaque(usaAsalto));	
+				cout << ejercitoChina[china]->getNombre();
+				if(chinaAsalto == true)
+					cout << " (ASALTO) ataca a: ";
+				else
+					cout << " (SOPORTE) ataca a: ";
+				cout<< ejercitoUSA[usa]->getNombre();
+				if(usaAsalto == true)
+					cout << " (ASALTO)";
+				else
+					cout << " (SOPORTE)";
+					
+				cout << endl << endl;			
+			}
+									
 			
 			if(ejercitoUSA[usa]->getPtsVida()<=0){
 				delete ejercitoUSA[usa];
@@ -346,4 +410,53 @@ void simulacion(){
 		<< "Sobrevivientes Chinos: " << ejercitoChina.size() << endl
 		<< "Sobrevivientes Gringos: " << ejercitoUSA.size() << endl;
 	}
+}
+
+void guardarSoldadosChina(){
+	ofstream binaryFile("soldadosChina.bin",ios::binary|ios::trunc);
+	if(!binaryFile.is_open())
+		exit(1);
+		
+	for(int i=0;i<ejercitoChina.size();i++){
+		Soldado* soldado = ejercitoChina[i];
+		size_t tempSize=0;
+		tempSize=soldado->getSize();
+		binaryFile.write((char*)&tempSize,sizeof(size_t));
+		binaryFile.write((char*)soldado,tempSize);
+		delete soldado;
+	}
+	
+	binaryFile.close();
+		
+}
+void guardarSoldadosUSA(){
+	ofstream binaryFile("soldadosUSA.bin",ios::binary|ios::trunc);
+	if(!binaryFile.is_open())
+		exit(1);
+		
+	for(int i=0;i<ejercitoUSA.size();i++){
+		Soldado* soldado = ejercitoUSA[i];
+		size_t tempSize=0;
+		tempSize=soldado->getSize();
+		binaryFile.write((char*)&tempSize,sizeof(size_t));
+		binaryFile.write((char*)soldado,tempSize);
+		delete soldado;
+	}
+	
+	binaryFile.close();
+		
+}
+void cargarSoldadosChina(){
+	ifstream binaryFile("soldadosChina.bin",ios::binary);
+	if(!binaryFile.is_open())
+		exit(1);
+	
+	size_t tempSize=0;
+	while(binaryFile.read((char*)&tempSize,sizeof(size_t))){
+		Soldado* soldado = NULL;
+		binaryFile.read((char*)&soldado,tempSize);		
+		ejercitoChina.push_back(soldado);
+	}
+	
+	binaryFile.close();			
 }
