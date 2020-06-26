@@ -13,6 +13,8 @@ class Soporte : public Soldado
 		
 		void setPtsVida(bool,int);
 		int valorAtaque(bool);
+		
+		size_t getSize();
 	protected:
 		int blindaje;
 		int camuflaje;

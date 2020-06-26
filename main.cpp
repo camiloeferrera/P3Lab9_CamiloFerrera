@@ -12,6 +12,8 @@ using std::ios;
 using std::string;
 #include <vector>
 using std::vector;
+#include <random>
+#include <time.h>
 #include "Soldado.h"
 #include "Asalto.h"
 #include "Soporte.h"
@@ -23,7 +25,8 @@ void menuPrincipal();
 void crearSoldado();
 void eliminarSoldado();
 void listarSoldados();
-
+void guardarSoldados();
+void simulacion();
 int main() {
 	setlocale(LC_ALL,"spanish");
 	while(true){
@@ -59,6 +62,14 @@ void menuPrincipal(){
 		}
 		case 3:{
 			listarSoldados();
+			break;
+		}
+		case 4:{
+			//guardarSoldados();
+			break;
+		}
+		case 6:{
+			simulacion();
 			break;
 		}
 		case 7:{
@@ -206,7 +217,7 @@ void eliminarSoldado(){
 			} else {
 				int opcion;
 				for(int i=0;i<ejercitoUSA.size();i++){
-					cout << (i+1) << ". Nombre: " << ejercitoChina[i]->getNombre() << endl;
+					cout << (i+1) << ". Nombre: " << ejercitoUSA[i]->getNombre() << endl;
 				}
 				cout << "Seleccione el soldado a ejecutar: ";
 				cin >> opcion;
@@ -220,7 +231,7 @@ void eliminarSoldado(){
 				}
 				
 				delete ejercitoUSA[opcion];
-				ejercitoUSA.erase(ejercitoChina.begin()+opcion);
+				ejercitoUSA.erase(ejercitoUSA.begin()+opcion);
 				cout << endl << "Has ejecutado al soldado, se le velara pronto..." << endl << endl;				
 			}
 			break;
@@ -231,6 +242,8 @@ void eliminarSoldado(){
 void listarSoldados(){
 	if(ejercitoChina.size()==0){
 		cout << "No hay soldados en el ejercito chino." << endl;
+		if (ejercitoUSA.size()!=0)
+			cout << endl;
 	} else {
 		cout << "Ejercito CHINA" << endl;
 		for(int i=0;i<ejercitoChina.size();i++){
@@ -247,4 +260,83 @@ void listarSoldados(){
 		}
 	}
 	cout << endl;
+}
+
+void guardarSoldados(){
+	ofstream binaryFile("SoldadosChinos.bin",ios::binary|ios::trunc);
+	if(!binaryFile.is_open()){
+		cout << "No se pudo abrir el archivo";
+		exit(1);
+	}
+	
+	size_t tempSize=0;
+	
+	/*for(int i=0;i<ejercitoChina.size();i++){
+		Soldado soldado = new Soldado (ejercitoChina[i]->getNombre)
+		tempSize = ejercitoChina[i]->getSize();
+		binaryFile.write((char*)&tempSize,sizeof(size_t));
+		binaryFile.write(ejercitoChina[1],tempSize)
+	}*/
+	
+	binaryFile.close();
+	cout << "Soldados chinos guardados exitosamente!" << endl << endl;
+}
+void simulacion(){
+	if(ejercitoChina.size()==0 || ejercitoUSA.size() == 0){
+		cout << "No hay suficientes soldados para combatir..." << endl << endl;
+	} else {
+		int bajasChinas=0,bajasGringas=0;
+		while(true){
+			srand((int)time(0));
+			//China y USA seleccinaran el soldado a combatir de sus ejercitos
+			int china = rand() % ejercitoChina.size();
+			int usa = rand() % ejercitoUSA.size();
+			
+			//Punteros que nos ayudaran a definir si los soldados son de asalto o de soporte
+			Asalto* ptChina = dynamic_cast<Asalto*>(ejercitoChina[china]);
+			Asalto* ptUsa = dynamic_cast<Asalto*>(ejercitoUSA[usa]);
+			
+			//booleanos que definiran si los soldados seleccionados son de asalto
+			bool chinaAsalto = true; 
+			bool usaAsalto = true;
+			
+			//si los punteros son 0, entonces los booleanos seran cambiados a false ya que los soldados no son de asalto.
+			if(ptChina==0 )
+				chinaAsalto = false;
+			if(ptUsa==0)
+				usaAsalto = false;
+			
+			// los soldados seleccionados se pelean entre si
+			ejercitoUSA[usa]->setPtsVida(chinaAsalto,ejercitoChina[china]->valorAtaque(usaAsalto));
+			ejercitoChina[china]->setPtsVida(usaAsalto,ejercitoUSA[usa]->valorAtaque(chinaAsalto));		
+				
+			
+			if(ejercitoUSA[usa]->getPtsVida()<=0){
+				delete ejercitoUSA[usa];
+				ejercitoUSA.erase(ejercitoUSA.begin()+usa);
+				bajasGringas++;
+			}
+			if(ejercitoChina[china]->getPtsVida()<=0){
+				delete ejercitoChina[china];
+				ejercitoChina.erase(ejercitoChina.begin()+china);
+				bajasChinas++;
+			}
+			
+			// si un ejercito se queda sin soldados se acaba la guerra
+			if(ejercitoChina.size()==0 || ejercitoUSA.size()==0)
+				break;
+		}
+		
+		if(ejercitoChina.size()==0 && ejercitoUSA.size()!=0){
+			cout << "Ha ganado Estados Unidos! VIVA TRUMP!" << endl << endl;
+		} else if (ejercitoUSA.size()==0 && ejercitoChina.size()!=0){
+			cout << "Ha ganado China! VIVA HUAWEI!" << endl << endl;
+		} else {
+			cout << "EMPATE!!!" << endl << endl;
+		}
+		cout << "Bajas Chinas: " << bajasChinas << endl
+		<< "Bajas Gringas: " << bajasGringas << endl << endl
+		<< "Sobrevivientes Chinos: " << ejercitoChina.size() << endl
+		<< "Sobrevivientes Gringos: " << ejercitoUSA.size() << endl << endl;
+	}
 }

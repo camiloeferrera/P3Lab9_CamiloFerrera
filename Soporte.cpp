@@ -28,3 +28,7 @@ int Soporte::valorAtaque(bool asalto){
 	else
 		return this->ptsFuerza*10;	
 }
+
+size_t Soporte::getSize(){
+	return sizeof(Soporte);
+}

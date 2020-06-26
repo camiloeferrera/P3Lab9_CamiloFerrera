@@ -28,3 +28,7 @@ int Asalto::valorAtaque(bool asalto){
 	else
 		return this->fuerzaExtra*(10+(this->velocidad*2));	
 }
+
+size_t Asalto::getSize(){
+	return sizeof(Asalto);
+}
