@@ -1,3 +1,4 @@
+#include <conio.h>
 #include <iostream>
 using std::cout;
 using std::cin;
@@ -14,6 +15,7 @@ using std::string;
 using std::vector;
 #include <random>
 #include <time.h>
+
 #include "Soldado.h"
 #include "Asalto.h"
 #include "Soporte.h"
@@ -47,9 +49,11 @@ void menuPrincipal(){
 	<< "Ingrese opcion: ";
 	cin >> opcion;
 	
-	if(opcion != 7){
+	/*if(opcion != 7){
 		cout << endl;
-	}
+	}*/
+	
+	system("cls");
 	
 	switch(opcion){
 		case 1:{
@@ -81,10 +85,14 @@ void menuPrincipal(){
 			exit(0);
 		}
 		default:{
-			cout << "Opcion incorrecta..." << endl << endl;
+			cout << "Opcion incorrecta..." << endl;
 			break;
 		}
 	}
+	char tecla;
+	cout << endl << "Presiona cualquier tecla para continuar: ";
+	tecla = getch();
+	system("cls");
 }
 
 void crearSoldado(){
@@ -135,12 +143,12 @@ void crearSoldado(){
 			switch(opcionEjercito){
 				case 1:{
 					ejercitoChina.push_back(new Asalto(nombre,ptsVida,ptsFuerza,velocidad,fuerzaExtra));
-					cout << "Soldado de Asalto agregado al ejercito chino!" << endl << endl;
+					cout << "Soldado de Asalto agregado al ejercito chino!" << endl;
 					break;
 				}
 				case 2:{
 					ejercitoUSA.push_back(new Asalto(nombre,ptsVida,ptsFuerza,velocidad,fuerzaExtra));
-					cout << "Soldado de Asalto agregado al ejercito gringo!" << endl << endl;
+					cout << "Soldado de Asalto agregado al ejercito gringo!" << endl;
 					break;
 				}
 			}
@@ -157,12 +165,12 @@ void crearSoldado(){
 			switch(opcionEjercito){
 				case 1:{
 					ejercitoChina.push_back(new Soporte(nombre,ptsVida,ptsFuerza,blindaje,camuflaje));
-					cout << "Soldado de Soporte agregado al ejercito chino!" << endl << endl;
+					cout << "Soldado de Soporte agregado al ejercito chino!" << endl;
 					break;
 				}
 				case 2:{
 					ejercitoUSA.push_back(new Soporte(nombre,ptsVida,ptsFuerza,blindaje,camuflaje));
-					cout << "Soldado de Soporte agregado al ejercito gringo!" << endl << endl;
+					cout << "Soldado de Soporte agregado al ejercito gringo!" << endl;
 					break;
 				}
 			}
@@ -187,7 +195,7 @@ void eliminarSoldado(){
 	switch(opcionEjercito){
 		case 1:{
 			if (ejercitoChina.size()==0){
-				cout << "No hay soldados en este ejercito." << endl << endl;
+				cout << "No hay soldados en este ejercito." << endl;
 			} else {
 				int opcion;
 				for(int i=0;i<ejercitoChina.size();i++){
@@ -206,14 +214,14 @@ void eliminarSoldado(){
 				
 				delete ejercitoChina[opcion];
 				ejercitoChina.erase(ejercitoChina.begin()+opcion);
-				cout << endl << "Has ejecutado al soldado, se le velara pronto..." << endl << endl;				
+				cout << endl << "Has ejecutado al soldado, se le velara pronto..." << endl;	
 			}
 						
 			break;
 		}
 		case 2:{
 			if (ejercitoUSA.size()==0){
-				cout << "No hay soldados en este ejercito." << endl << endl;
+				cout << "No hay soldados en este ejercito." << endl;
 			} else {
 				int opcion;
 				for(int i=0;i<ejercitoUSA.size();i++){
@@ -232,7 +240,7 @@ void eliminarSoldado(){
 				
 				delete ejercitoUSA[opcion];
 				ejercitoUSA.erase(ejercitoUSA.begin()+opcion);
-				cout << endl << "Has ejecutado al soldado, se le velara pronto..." << endl << endl;				
+				cout << endl << "Has ejecutado al soldado, se le velara pronto..." << endl;				
 			}
 			break;
 		}
@@ -259,7 +267,6 @@ void listarSoldados(){
 			cout << (i+1) << ". Nombre: " << ejercitoUSA[i]->getNombre() << endl;
 		}
 	}
-	cout << endl;
 }
 
 void guardarSoldados(){
@@ -283,7 +290,7 @@ void guardarSoldados(){
 }
 void simulacion(){
 	if(ejercitoChina.size()==0 || ejercitoUSA.size() == 0){
-		cout << "No hay suficientes soldados para combatir..." << endl << endl;
+		cout << "No hay suficientes soldados para combatir..." << endl;
 	} else {
 		int bajasChinas=0,bajasGringas=0;
 		while(true){
@@ -337,6 +344,6 @@ void simulacion(){
 		cout << "Bajas Chinas: " << bajasChinas << endl
 		<< "Bajas Gringas: " << bajasGringas << endl << endl
 		<< "Sobrevivientes Chinos: " << ejercitoChina.size() << endl
-		<< "Sobrevivientes Gringos: " << ejercitoUSA.size() << endl << endl;
+		<< "Sobrevivientes Gringos: " << ejercitoUSA.size() << endl;
 	}
 }
