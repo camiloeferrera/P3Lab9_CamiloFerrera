@@ -278,25 +278,6 @@ void listarSoldados(){
 	}
 }
 
-void guardarSoldados(){
-	ofstream binaryFile("SoldadosChinos.bin",ios::binary|ios::trunc);
-	if(!binaryFile.is_open()){
-		cout << "No se pudo abrir el archivo";
-		exit(1);
-	}
-	
-	size_t tempSize=0;
-	
-	/*for(int i=0;i<ejercitoChina.size();i++){
-		Soldado soldado = new Soldado (ejercitoChina[i]->getNombre)
-		tempSize = ejercitoChina[i]->getSize();
-		binaryFile.write((char*)&tempSize,sizeof(size_t));
-		binaryFile.write(ejercitoChina[1],tempSize)
-	}*/
-	
-	binaryFile.close();
-	cout << "Soldados chinos guardados exitosamente!" << endl << endl;
-}
 void simulacion(){
 	if(ejercitoChina.size()==0 || ejercitoUSA.size() == 0){
 		cout << "No hay suficientes soldados para combatir..." << endl;
