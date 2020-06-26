@@ -2,6 +2,9 @@
 #define ASALTO_H
 
 #include "Soldado.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 class Asalto : public Soldado
 {
@@ -15,6 +18,7 @@ class Asalto : public Soldado
 		int valorAtaque(bool);
 		
 		size_t getSize();
+		void imprimirAtributos();
 	protected:
 		int velocidad;
 		int fuerzaExtra;

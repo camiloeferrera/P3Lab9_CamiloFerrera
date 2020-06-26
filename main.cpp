@@ -262,7 +262,8 @@ void listarSoldados(){
 	} else {
 		cout << "Ejercito CHINA" << endl;
 		for(int i=0;i<ejercitoChina.size();i++){
-			cout << (i+1) << ". Nombre: " << ejercitoChina[i]->getNombre() << ", PTS Vida: " << ejercitoChina[i]->getPtsVida() << endl;
+			cout << (i+1) << ". Nombre: " << ejercitoChina[i]->getNombre() << ", PTS Vida: " << ejercitoChina[i]->getPtsVida();
+			ejercitoChina[i]->imprimirAtributos();
 		}
 		cout << endl;
 	}
@@ -271,7 +272,8 @@ void listarSoldados(){
 	} else {
 		cout << "Ejercito USA" << endl;
 		for(int i=0;i<ejercitoUSA.size();i++){
-			cout << (i+1) << ". Nombre: " << ejercitoUSA[i]->getNombre() << ", PTS Vida: " << ejercitoUSA[i]->getPtsVida() << endl;
+			cout << (i+1) << ". Nombre: " << ejercitoUSA[i]->getNombre() << ", PTS Vida: " << ejercitoUSA[i]->getPtsVida();
+			ejercitoUSA[i]->imprimirAtributos();
 		}
 	}
 }

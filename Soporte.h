@@ -2,6 +2,9 @@
 #define SOPORTE_H
 
 #include "Soldado.h"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 class Soporte : public Soldado
 {
@@ -15,6 +18,7 @@ class Soporte : public Soldado
 		int valorAtaque(bool);
 		
 		size_t getSize();
+		void imprimirAtributos();
 	protected:
 		int blindaje;
 		int camuflaje;

@@ -32,3 +32,6 @@ int Asalto::valorAtaque(bool asalto){
 size_t Asalto::getSize(){
 	return sizeof(Asalto);
 }
+void Asalto::imprimirAtributos(){
+	cout << ", Velocidad: " << this->velocidad << ", FuerzaExtra: " << this->fuerzaExtra << endl;
+}

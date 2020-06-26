@@ -32,3 +32,6 @@ int Soporte::valorAtaque(bool asalto){
 size_t Soporte::getSize(){
 	return sizeof(Soporte);
 }
+void Soporte::imprimirAtributos(){
+	cout << ", Blindaje: " << this->blindaje << ", Camuflaje: " << this->camuflaje << endl;
+}
